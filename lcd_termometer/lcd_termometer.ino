@@ -6,7 +6,7 @@ const int tSensorPin = A0;
 const float voltageFactor = 5.0/1024.0;
 float prev = 0.0;
 float rawTC = 0.0;
-float filterStrength = 0.975;
+float filterStrength = 0.9;
 float tempC = 0.0;
 float tempF = 0.0;
 float minC = 100.0;
@@ -36,7 +36,7 @@ void printToLCD() {
     lcd.print(" Min: ");
     lcd.print(minC,1);
     lcd.print("C");
-    delay(1000);
+    delay(500);
     lcd.clear();
 }
 void setup() {

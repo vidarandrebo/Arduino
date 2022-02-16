@@ -3,15 +3,16 @@ LiquidCrystal lcd(12,11,5,4,3,2);
 
 const int tSensorPin = A0;
 
-const float voltageFactor = 5.0/1024.0;
+const float voltageFactor = 5000.0/1024.0;
 float prev = 0.0;
 float rawTC = 0.0;
-float filterStrength = 0.9;
+float filterStrength = 0.99;
 float tempC = 0.0;
 float tempF = 0.0;
 float minC = 100.0;
 float maxC = -50.0;
 int tSensorVal = 0;
+int loopCounter = 0;
 
 float toFahrenheit() {
     return (tempC * 9.0/5.0) + 32;
@@ -21,10 +22,11 @@ float filter() {
 }
 
 float voltToCelsius(float voltage) {
-    return (voltage - 0.5) * 100;
+    return (voltage - 500) / 10.0;
 }
 
 void printToLCD() {
+    lcd.clear();
     lcd.print(tempC, 1);
     lcd.print("C");
     lcd.print(" Max: ");
@@ -36,8 +38,6 @@ void printToLCD() {
     lcd.print(" Min: ");
     lcd.print(minC,1);
     lcd.print("C");
-    delay(500);
-    lcd.clear();
 }
 void setup() {
     lcd.noBlink();
@@ -59,5 +59,12 @@ void loop() {
     if (tempC < minC) {
         minC = tempC;
     }
-    printToLCD();
+    //updates lcd every 2000 cycles
+    if (loopCounter >= 2000) {
+        printToLCD();
+        loopCounter = 0;
+    }
+    else {
+        loopCounter++;
+    }
 }
